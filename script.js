@@ -67,7 +67,7 @@ const tipoCristal = `${datos.tipo_lente} ${subtipo} ${datos.material} ${datos.cr
 
 document.querySelectorAll(".esf").forEach(input => {
   input.addEventListener("input", () => {
-    if (!/^([+-])?(0|[1-9]\d*)(\\.25|\\.50|\\.75|\\.00)?$/.test(input.value) && input.value !== "0") {
+    if (!/^([+-])?(0|[1-9]\d*)\.(00|25|50|75)$/.test(input.value) && input.value !== "0") {
       input.setCustomValidity("Debe ser múltiplo de 0.25 y con signo si no es 0");
     } else {
       input.setCustomValidity("");
