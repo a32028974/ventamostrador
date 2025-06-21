@@ -2,7 +2,7 @@ let numeroTrabajo = 100000;
 const resumen = document.getElementById("resumen");
 
 // URL para guardar datos en Google Sheet
-const URL_GUARDAR = "https://script.google.com/macros/s/AKfycbxRB59BD_qty5J_9EgfOBTve1SaoyKzFpwRRSGF60-1L5YgxGcJzKxZPP1n_Nul1Gtn/exec";
+const URL_GUARDAR = "https://script.google.com/macros/s/AKfycbzn6mj__xRB8JjPdkYgrsyTtb1sRNX2Hcs5O0byIlaG0dXCz-cUVRNaprPKYrnF2EQp/exec";
 const URL_ARMAZONES = "https://script.google.com/macros/s/AKfycbyZpgCOy4VFFPE_gq_jpv9Ed5KsPjJqLAX-8SEohVRYl_qAm2PIpEtpAALLvRx9Bdt7Pg/exec";
 
 document.getElementById("formulario-trabajo").addEventListener("submit", async function (e) {
