@@ -5,6 +5,28 @@ const resumen = document.getElementById("resumen");
 const URL_GUARDAR = "https://script.google.com/macros/s/AKfycbzn6mj__xRB8JjPdkYgrsyTtb1sRNX2Hcs5O0byIlaG0dXCz-cUVRNaprPKYrnF2EQp/exec";
 const URL_ARMAZONES = "https://script.google.com/macros/s/AKfycbyZpgCOy4VFFPE_gq_jpv9Ed5KsPjJqLAX-8SEohVRYl_qAm2PIpEtpAALLvRx9Bdt7Pg/exec";
 
+// Generar opciones para selectores de ESF y CIL
+function generarOpcionesSelect(min, max) {
+  const opciones = ['<option value="">Seleccionar</option>'];
+  for (let i = min * 4; i <= max * 4; i++) {
+    const valor = (i / 4).toFixed(2);
+    opciones.push(`<option value="${valor > 0 ? '+' + valor : valor}">${valor > 0 ? '+' + valor : valor}</option>`);
+  }
+  return opciones.join('\n');
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const campos = ["od_esf", "oi_esf"];
+  campos.forEach(id => {
+    document.getElementById(id).innerHTML = generarOpcionesSelect(-24, 24);
+  });
+
+  const camposCil = ["od_cil", "oi_cil"];
+  camposCil.forEach(id => {
+    document.getElementById(id).innerHTML = generarOpcionesSelect(-7, 7);
+  });
+});
+
 document.getElementById("formulario-trabajo").addEventListener("submit", async function (e) {
   e.preventDefault();
   const form = e.target;
@@ -52,7 +74,6 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
 
   mostrarResumen(payload);
 
-  // Enviar a Google Sheets
   await fetch(URL_GUARDAR, {
     method: "POST",
     body: JSON.stringify(payload),
@@ -62,34 +83,6 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
   window.print();
   form.reset();
   resumen.classList.add("oculto");
-});
-
-document.querySelectorAll(".esf").forEach(input => {
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(",", ".");
-    const valor = input.value.trim();
-
-    const regex = /^([+-])?(0|[1-9]\d*)\.(00|25|50|75)$/;
-    if (!regex.test(valor)) {
-      input.setCustomValidity("Debe ser múltiplo de 0.25 (con o sin signo)");
-    } else {
-      input.setCustomValidity("");
-    }
-  });
-});
-
-document.querySelectorAll(".cil").forEach(input => {
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(",", ".");
-    const valor = input.value.trim();
-
-    const regex = /^[-+](0|[1-9]\d*)\.(00|25|50|75)$/;
-    if (!regex.test(valor)) {
-      input.setCustomValidity("Debe llevar signo y ser múltiplo de 0.25");
-    } else {
-      input.setCustomValidity("");
-    }
-  });
 });
 
 function validarGraduaciones() {
@@ -134,12 +127,15 @@ document.getElementById("buscar-armazon").addEventListener("click", async () => 
 
   const datosDiv = document.getElementById("datos-armazon");
   if (encontrado) {
+    const info = `Modelo: ${encontrado["B"]}, Color: ${encontrado["C"]}, Tamaño: ${encontrado["E"]}, Precio: ${encontrado["H"]}`;
+    alert("Armazón encontrado: " + info);
     datosDiv.innerHTML = `
       <p><strong>Modelo:</strong> ${encontrado["B"]}</p>
       <p><strong>Color:</strong> ${encontrado["C"]}</p>
       <p><strong>Tamaño:</strong> ${encontrado["E"]}</p>
       <p><strong>Precio:</strong> ${encontrado["H"]}</p>`;
   } else {
+    alert("No se encontró el armazón.");
     datosDiv.innerHTML = "<p style='color:red;'>No se encontró el armazón.</p>";
   }
 });
@@ -161,7 +157,6 @@ document.getElementById("btn-consulta").addEventListener("click", async () => {
 
   const form = document.getElementById("formulario-trabajo");
 
-  // Cargar los datos en el formulario
   form.nombre.value = resultado.nombre || "";
   form.dni.value = resultado.dni || "";
   form.oculista.value = resultado.oculista || "";
