@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carga de Trabajo - Óptica</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Carga de Trabajo v21.6.25 9.50</h1>
+    <form id="formulario-trabajo">
+      
+      <!-- Fecha estimada de entrega -->
+      <section>
+        <label>Fecha estimada de entrega:</label><br>
+        <label><input type="radio" name="entrega" value="estándar" required> Estándar (1 semana)</label>
+        <label><input type="radio" name="entrega" value="urgente"> Urgente (3 días)</label>
+        <label><input type="radio" name="entrega" value="laboratorio"> Laboratorio (10-20 días)</label>
+      </section>
+
+      <!-- Datos del paciente -->
+      <section>
+        <h2>Paciente</h2>
+        <input type="text" name="nombre" placeholder="Apellido y nombre" required />
+        <input type="text" name="dni" placeholder="DNI" required />
+        <input type="tel" name="telefono" placeholder="Teléfono celular" required />
+        <input type="text" name="localidad" placeholder="Localidad" />
+      </section>
+
+      <!-- Receta -->
+      <section>
+        <h2>Receta</h2>
+        <input type="text" name="oculista" placeholder="Apellido del oculista" />
+        <label><input type="checkbox" name="jimena" /> Jimena</label>
+        <label><input type="checkbox" name="copia" /> Copia anteojo en uso</label>
+        <input type="text" name="otros" placeholder="Otros" />
+      </section>
+
+      <!-- Graduación -->
+      <section id="graduacion">
+        <h2>Graduación</h2>
+        <div>
+          <label>OD:</label>
+          <input type="text" name="od_esf" placeholder="ESF" />
+          <input type="text" name="od_cil" placeholder="CIL" />
+          <input type="number" name="od_eje" placeholder="EJE" min="0" max="180" />
+        </div>
+        <div>
+          <label>OI:</label>
+          <input type="text" name="oi_esf" placeholder="ESF" />
+          <input type="text" name="oi_cil" placeholder="CIL" />
+          <input type="number" name="oi_eje" placeholder="EJE" min="0" max="180" />
+        </div>
+      </section>
+
+      <!-- Tipo de lente, material, etc. -->
+      <section id="seleccion">
+        <!-- ...Acá irá todo lo que detallaste sobre monofocal/bifocal/material/etc. -->
+      </section>
+
+      <!-- Armazón -->
+      <section id="armazon">
+        <h2>Armazón</h2>
+        <input type="number" id="numero-armazon" placeholder="N° de armazón" />
+        <button type="button" id="buscar-armazon">Buscar</button>
+        <div id="datos-armazon"></div>
+        <label><input type="radio" name="opcion_armazon" value="no_registrado"> Armazón no registrado</label>
+        <input type="text" id="armazon_no_registrado" placeholder="Marca y modelo" />
+        <label><input type="radio" name="opcion_armazon" value="cliente"> Armazón del cliente</label>
+        <input type="text" id="armazon_cliente" placeholder="Descripción del armazón del cliente" />
+      </section>
+
+      <!-- Botones -->
+      <div class="botones">
+        <button type="submit">Guardar y Imprimir</button>
+        <button type="button" onclick="buscarTrabajo()">Consultar trabajo</button>
+      </div>
+    </form>
+
+    <div id="resumen" class="oculto"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
