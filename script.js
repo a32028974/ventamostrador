@@ -172,3 +172,34 @@ function extraerDato(texto, clave) {
   const match = texto.match(regex);
   return match ? match[1] : "";
 }
+
+// Mostrar u ocultar sub-opciones según tipo de lente
+document.querySelectorAll("input[name='tipo_lente']").forEach(radio => {
+  radio.addEventListener("change", actualizarOpcionesTipoLente);
+});
+
+function actualizarOpcionesTipoLente() {
+  const tipo = document.querySelector("input[name='tipo_lente']:checked").value;
+  const divMonofocal = document.getElementById("opciones-monofocal");
+  const divBifocal = document.getElementById("opciones-bifocal");
+
+  // Ocultar todo por defecto
+  divMonofocal.classList.add("oculto");
+  divBifocal.classList.add("oculto");
+
+  // Limpiar radios anteriores
+  limpiarRadios("subtipo_monofocal");
+  limpiarRadios("subtipo_bifocal");
+
+  // Mostrar lo correspondiente
+  if (tipo === "monofocal") {
+    divMonofocal.classList.remove("oculto");
+  } else if (tipo === "bifocal") {
+    divBifocal.classList.remove("oculto");
+  }
+}
+
+function limpiarRadios(nombre) {
+  document.querySelectorAll(`input[name='${nombre}']`).forEach(el => el.checked = false);
+}
+
