@@ -8,8 +8,15 @@
 </head>
 <body>
   <div class="container">
-    <h1>Carga de Trabajo v21.6.25 10.06</h1>    
+    <h1>Carga de Trabajo v21.6.25 12.20 </h1>
     <form id="formulario-trabajo">
+      <!-- Consulta de trabajo existente -->
+      <section>
+        <label for="consulta">Consultar trabajo por Nº o DNI:</label>
+        <input type="text" id="consulta" placeholder="Nº de trabajo o DNI" />
+        <button type="button" id="btn-consulta">Buscar</button>
+      </section>
+
       <!-- Fecha estimada de entrega -->
       <section>
         <label>Fecha estimada de entrega:</label><br>
@@ -41,15 +48,15 @@
         <h2>Graduación</h2>
         <div>
           <label>OD:</label>
-          <input type="text" name="od_esf" placeholder="ESF" class="esf" />
+          <input type="text" name="od_esf" placeholder="ESF" class="esf" required />
           <input type="text" name="od_cil" placeholder="CIL" class="cil" />
-          <input type="number" name="od_eje" placeholder="EJE" min="0" max="180" class="eje" />
+          <input type="number" name="od_eje" placeholder="EJE" class="eje" min="0" max="180" />
         </div>
         <div>
           <label>OI:</label>
-          <input type="text" name="oi_esf" placeholder="ESF" class="esf" />
+          <input type="text" name="oi_esf" placeholder="ESF" class="esf" required />
           <input type="text" name="oi_cil" placeholder="CIL" class="cil" />
-          <input type="number" name="oi_eje" placeholder="EJE" min="0" max="180" class="eje" />
+          <input type="number" name="oi_eje" placeholder="EJE" class="eje" min="0" max="180" />
         </div>
       </section>
 
@@ -60,8 +67,20 @@
         <label><input type="radio" name="tipo_lente" value="bifocal"> Bifocal</label>
         <label><input type="radio" name="tipo_lente" value="ocupacional"> Ocupacional</label>
         <label><input type="radio" name="tipo_lente" value="progresivo"> Progresivo</label>
-        <!-- Agregar select o inputs dependientes según selección -->
-        <!-- Esto se generará desde JS -->
+
+        <div id="opciones-monofocal" class="sub-opciones oculto">
+          <p><strong>Tipo Monofocal:</strong></p>
+          <label><input type="radio" name="subtipo_monofocal" value="lejos"> Lejos</label>
+          <label><input type="radio" name="subtipo_monofocal" value="cerca"> Cerca</label>
+          <label><input type="radio" name="subtipo_monofocal" value="intermedia"> Intermedia</label>
+        </div>
+
+        <div id="opciones-bifocal" class="sub-opciones oculto">
+          <p><strong>Tipo Bifocal:</strong></p>
+          <label><input type="radio" name="subtipo_bifocal" value="kriptock_comun"> Kriptock común</label>
+          <label><input type="radio" name="subtipo_bifocal" value="kriptock_invisible"> Kriptock invisible</label>
+          <label><input type="radio" name="subtipo_bifocal" value="flattop"> Flattop</label>
+        </div>
       </section>
 
       <section id="material">
@@ -134,7 +153,6 @@
       <!-- Botones -->
       <div class="botones">
         <button type="submit">Guardar y Imprimir</button>
-        <button type="button" onclick="buscarTrabajo()">Consultar trabajo</button>
       </div>
     </form>
 
