@@ -74,15 +74,35 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
 
   mostrarResumen(payload);
 
-  await fetch(URL_GUARDAR, {
+  try {
+  const response = await fetch(URL_GUARDAR, {
     method: "POST",
     body: JSON.stringify(payload),
     headers: { "Content-Type": "application/json" },
   });
 
-  window.print();
-  form.reset();
-  resumen.classList.add("oculto");
+  const resultado = await response.json();
+
+  if (resultado.estado === "ok") {
+    // Si se guardó bien, actualizar el stock
+    const numero = document.getElementById("numero-armazon").value;
+    if (numero) {
+      await fetch(`${URL_ARMAZONES}?vender=${numero}`, {
+        method: "GET",
+      });
+    }
+
+    window.print();
+    form.reset();
+    resumen.classList.add("oculto");
+  } else {
+    alert("Ocurrió un error al guardar el trabajo. Intentá de nuevo.");
+  }
+} catch (error) {
+  console.error("Error en la carga:", error);
+  alert("No se pudo guardar el trabajo. Verificá tu conexión.");
+}
+
 });
 
 function validarGraduaciones() {
