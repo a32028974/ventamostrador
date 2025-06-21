@@ -1,11 +1,9 @@
 let numeroTrabajo = 100000; 
 const resumen = document.getElementById("resumen");
 
-// URL para guardar datos en Google Sheet
 const URL_GUARDAR = "https://script.google.com/macros/s/AKfycbzn6mj__xRB8JjPdkYgrsyTtb1sRNX2Hcs5O0byIlaG0dXCz-cUVRNaprPKYrnF2EQp/exec";
 const URL_ARMAZONES = "https://script.google.com/macros/s/AKfycbyZpgCOy4VFFPE_gq_jpv9Ed5KsPjJqLAX-8SEohVRYl_qAm2PIpEtpAALLvRx9Bdt7Pg/exec";
 
-// Generar opciones para selectores de ESF y CIL
 function generarOpcionesSelect(min, max) {
   const opciones = ['<option value="">Seleccionar</option>'];
   for (let i = min * 4; i <= max * 4; i++) {
@@ -75,34 +73,28 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
   mostrarResumen(payload);
 
   try {
-  const response = await fetch(URL_GUARDAR, {
-    method: "POST",
-    body: JSON.stringify(payload),
-    headers: { "Content-Type": "application/json" },
-  });
+    const response = await fetch(URL_GUARDAR, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" },
+    });
+    const resultado = await response.json();
 
-  const resultado = await response.json();
-
-  if (resultado.estado === "ok") {
-    // Si se guardó bien, actualizar el stock
-    const numero = document.getElementById("numero-armazon").value;
-    if (numero) {
-      await fetch(`${URL_ARMAZONES}?vender=${numero}`, {
-        method: "GET",
-      });
+    if (resultado.estado === "ok") {
+      const numero = document.getElementById("numero-armazon").value;
+      if (numero) {
+        await fetch(`${URL_ARMAZONES}?vender=${numero}`, { method: "GET" });
+      }
+      window.print();
+      form.reset();
+      resumen.classList.add("oculto");
+    } else {
+      alert("Ocurrió un error al guardar el trabajo. Intentá de nuevo.");
     }
-
-    window.print();
-    form.reset();
-    resumen.classList.add("oculto");
-  } else {
-    alert("Ocurrió un error al guardar el trabajo. Intentá de nuevo.");
+  } catch (error) {
+    console.error("Error en la carga:", error);
+    alert("No se pudo guardar el trabajo. Verificá tu conexión.");
   }
-} catch (error) {
-  console.error("Error en la carga:", error);
-  alert("No se pudo guardar el trabajo. Verificá tu conexión.");
-}
-
 });
 
 function validarGraduaciones() {
