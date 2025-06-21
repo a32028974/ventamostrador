@@ -1,4 +1,4 @@
-let numeroTrabajo = 100000;
+let numeroTrabajo = 100000; 
 const resumen = document.getElementById("resumen");
 
 // URL para guardar datos en Google Sheet
@@ -17,17 +17,16 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
   const fecha = new Date().toLocaleDateString("es-AR");
   const trabajoID = numeroTrabajo++;
 
-let subtipo = "";
-if (datos.tipo_lente === "monofocal") {
-  subtipo = datos.subtipo_monofocal ? `de ${datos.subtipo_monofocal}` : "";
-} else if (datos.tipo_lente === "bifocal") {
-  if (datos.subtipo_bifocal === "kriptock_comun") subtipo = "kriptock común";
-  if (datos.subtipo_bifocal === "kriptock_invisible") subtipo = "kriptock invisible";
-  if (datos.subtipo_bifocal === "flattop") subtipo = "flattop";
-}
+  let subtipo = "";
+  if (datos.tipo_lente === "monofocal") {
+    subtipo = datos.subtipo_monofocal ? `de ${datos.subtipo_monofocal}` : "";
+  } else if (datos.tipo_lente === "bifocal") {
+    if (datos.subtipo_bifocal === "kriptock_comun") subtipo = "kriptock común";
+    if (datos.subtipo_bifocal === "kriptock_invisible") subtipo = "kriptock invisible";
+    if (datos.subtipo_bifocal === "flattop") subtipo = "flattop";
+  }
 
-const tipoCristal = `${datos.tipo_lente} ${subtipo} ${datos.material} ${datos.cristal}${datos.marca_antirreflejo ? " marca: " + datos.marca_antirreflejo : ""}${datos.color ? " color: " + datos.color : ""}`;
-
+  const tipoCristal = `${datos.tipo_lente} ${subtipo} ${datos.material} ${datos.cristal}${datos.marca_antirreflejo ? " marca: " + datos.marca_antirreflejo : ""}${datos.color ? " color: " + datos.color : ""}`;
 
   const armazon = datos.opcion_armazon === "no_registrado"
     ? datos.armazon_no_registrado
@@ -67,8 +66,12 @@ const tipoCristal = `${datos.tipo_lente} ${subtipo} ${datos.material} ${datos.cr
 
 document.querySelectorAll(".esf").forEach(input => {
   input.addEventListener("input", () => {
-    if (!/^([+-])?(0|[1-9]\d*)\.(00|25|50|75)$/.test(input.value) && input.value !== "0") {
-      input.setCustomValidity("Debe ser múltiplo de 0.25 y con signo si no es 0");
+    input.value = input.value.replace(",", ".");
+    const valor = input.value.trim();
+
+    const regex = /^([+-])?(0|[1-9]\d*)\.(00|25|50|75)$/;
+    if (!regex.test(valor)) {
+      input.setCustomValidity("Debe ser múltiplo de 0.25 (con o sin signo)");
     } else {
       input.setCustomValidity("");
     }
@@ -77,7 +80,11 @@ document.querySelectorAll(".esf").forEach(input => {
 
 document.querySelectorAll(".cil").forEach(input => {
   input.addEventListener("input", () => {
-    if (!/^([+-])(0|[1-9]\d*)(\\.25|\\.50|\\.75|\\.00)$/.test(input.value)) {
+    input.value = input.value.replace(",", ".");
+    const valor = input.value.trim();
+
+    const regex = /^[-+](0|[1-9]\d*)\.(00|25|50|75)$/;
+    if (!regex.test(valor)) {
       input.setCustomValidity("Debe llevar signo y ser múltiplo de 0.25");
     } else {
       input.setCustomValidity("");
@@ -137,11 +144,6 @@ document.getElementById("buscar-armazon").addEventListener("click", async () => 
   }
 });
 
-function buscarTrabajo() {
-  const dato = prompt("Ingresá número de trabajo o DNI para buscar:");
-  if (!dato) return;
-  alert("Función en desarrollo: pronto vas a poder consultar y editar trabajos guardados.");
-}
 document.getElementById("btn-consulta").addEventListener("click", async () => {
   const valor = document.getElementById("consulta").value.trim();
   if (!valor) {
@@ -175,7 +177,6 @@ document.getElementById("btn-consulta").addEventListener("click", async () => {
   alert("Trabajo cargado en el formulario.");
 });
 
-// Función auxiliar para extraer valores de texto como: "ESF +2.00 CIL -1.00 EJE 90°"
 function extraerDato(texto, clave) {
   if (!texto) return "";
   const regex = new RegExp(`${clave} ([^\\s°]+)`);
@@ -183,7 +184,6 @@ function extraerDato(texto, clave) {
   return match ? match[1] : "";
 }
 
-// Mostrar u ocultar sub-opciones según tipo de lente
 document.querySelectorAll("input[name='tipo_lente']").forEach(radio => {
   radio.addEventListener("change", actualizarOpcionesTipoLente);
 });
@@ -193,15 +193,12 @@ function actualizarOpcionesTipoLente() {
   const divMonofocal = document.getElementById("opciones-monofocal");
   const divBifocal = document.getElementById("opciones-bifocal");
 
-  // Ocultar todo por defecto
   divMonofocal.classList.add("oculto");
   divBifocal.classList.add("oculto");
 
-  // Limpiar radios anteriores
   limpiarRadios("subtipo_monofocal");
   limpiarRadios("subtipo_bifocal");
 
-  // Mostrar lo correspondiente
   if (tipo === "monofocal") {
     divMonofocal.classList.remove("oculto");
   } else if (tipo === "bifocal") {
@@ -212,4 +209,3 @@ function actualizarOpcionesTipoLente() {
 function limpiarRadios(nombre) {
   document.querySelectorAll(`input[name='${nombre}']`).forEach(el => el.checked = false);
 }
-
