@@ -1,50 +1,134 @@
 let numeroTrabajo = 100000;
+const resumen = document.getElementById("resumen");
 
-document.getElementById("formulario-trabajo").addEventListener("submit", function (e) {
+// URL para guardar datos en Google Sheet
+const URL_GUARDAR = "https://script.google.com/macros/s/AKfycbxRB59BD_qty5J_9EgfOBTve1SaoyKzFpwRRSGF60-1L5YgxGcJzKxZPP1n_Nul1Gtn/exec";
+const URL_ARMAZONES = "https://script.google.com/macros/s/AKfycbyZpgCOy4VFFPE_gq_jpv9Ed5KsPjJqLAX-8SEohVRYl_qAm2PIpEtpAALLvRx9Bdt7Pg/exec";
+
+document.getElementById("formulario-trabajo").addEventListener("submit", async function (e) {
   e.preventDefault();
-
-  // Validar campos y mostrar resumen
-  const resumen = document.getElementById("resumen");
-  resumen.innerHTML = "<strong>Resumen de carga:</strong><br><br>";
-
   const form = e.target;
-  const datos = new FormData(form);
-  datos.forEach((value, key) => {
-    resumen.innerHTML += `<strong>${key}:</strong> ${value}<br>`;
+
+  if (!validarGraduaciones()) return;
+
+  const data = new FormData(form);
+  const datos = Object.fromEntries(data.entries());
+
+  const fecha = new Date().toLocaleDateString("es-AR");
+  const trabajoID = numeroTrabajo++;
+
+  const tipoCristal = `${datos.tipo_lente} ${datos.material} ${datos.cristal}${datos.marca_antirreflejo ? " marca: " + datos.marca_antirreflejo : ""}${datos.color ? " color: " + datos.color : ""}`;
+
+  const armazon = datos.opcion_armazon === "no_registrado"
+    ? datos.armazon_no_registrado
+    : datos.opcion_armazon === "cliente"
+    ? datos.armazon_cliente
+    : document.getElementById("datos-armazon").innerText || "No encontrado";
+
+  const graduacionOD = `ESF ${datos.od_esf} ${datos.od_cil ? "CIL " + datos.od_cil : ""} ${datos.od_eje ? "EJE " + datos.od_eje + "°" : ""}`;
+  const graduacionOI = `ESF ${datos.oi_esf} ${datos.oi_cil ? "CIL " + datos.oi_cil : ""} ${datos.oi_eje ? "EJE " + datos.oi_eje + "°" : ""}`;
+
+  const payload = {
+    fecha,
+    trabajoID,
+    dni: datos.dni,
+    nombre: datos.nombre,
+    tipoCristal,
+    armazon,
+    oculista: datos.jimena ? "JIMENA" : datos.oculista || "",
+    observaciones: datos.otros_adicionales || "",
+    od: graduacionOD,
+    oi: graduacionOI,
+  };
+
+  mostrarResumen(payload);
+
+  // Enviar a Google Sheets
+  await fetch(URL_GUARDAR, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "application/json" },
   });
 
-  resumen.classList.remove("oculto");
-
-  // TODO: enviar a Google Sheets y luego:
-  numeroTrabajo++;
+  window.print();
   form.reset();
+  resumen.classList.add("oculto");
 });
 
-document.getElementById("buscar-armazon").addEventListener("click", function () {
+document.querySelectorAll(".esf").forEach(input => {
+  input.addEventListener("input", () => {
+    if (!/^([+-])?(0|[1-9]\d*)(\\.25|\\.50|\\.75|\\.00)?$/.test(input.value) && input.value !== "0") {
+      input.setCustomValidity("Debe ser múltiplo de 0.25 y con signo si no es 0");
+    } else {
+      input.setCustomValidity("");
+    }
+  });
+});
+
+document.querySelectorAll(".cil").forEach(input => {
+  input.addEventListener("input", () => {
+    if (!/^([+-])(0|[1-9]\d*)(\\.25|\\.50|\\.75|\\.00)$/.test(input.value)) {
+      input.setCustomValidity("Debe llevar signo y ser múltiplo de 0.25");
+    } else {
+      input.setCustomValidity("");
+    }
+  });
+});
+
+function validarGraduaciones() {
+  const od_cil = document.querySelector("[name='od_cil']").value;
+  const od_eje = document.querySelector("[name='od_eje']").value;
+  const oi_cil = document.querySelector("[name='oi_cil']").value;
+  const oi_eje = document.querySelector("[name='oi_eje']").value;
+
+  if (od_cil && (od_eje === "" || od_eje < 0 || od_eje > 180)) {
+    alert("Si OD tiene CIL, debe tener EJE entre 0 y 180");
+    return false;
+  }
+  if (oi_cil && (oi_eje === "" || oi_eje < 0 || oi_eje > 180)) {
+    alert("Si OI tiene CIL, debe tener EJE entre 0 y 180");
+    return false;
+  }
+  return true;
+}
+
+function mostrarResumen(data) {
+  resumen.innerHTML = `<h3>Resumen del trabajo</h3>
+  <p><strong>Fecha:</strong> ${data.fecha}</p>
+  <p><strong>N° Trabajo:</strong> ${data.trabajoID}</p>
+  <p><strong>Nombre:</strong> ${data.nombre}</p>
+  <p><strong>DNI:</strong> ${data.dni}</p>
+  <p><strong>Tipo de Cristal:</strong> ${data.tipoCristal}</p>
+  <p><strong>Graduación OD:</strong> ${data.od}</p>
+  <p><strong>Graduación OI:</strong> ${data.oi}</p>
+  <p><strong>Armazón:</strong> ${data.armazon}</p>
+  <p><strong>Oculista:</strong> ${data.oculista}</p>
+  <p><strong>Observaciones:</strong> ${data.observaciones}</p>`;
+  resumen.classList.remove("oculto");
+}
+
+document.getElementById("buscar-armazon").addEventListener("click", async () => {
   const nro = document.getElementById("numero-armazon").value;
   if (!nro) return;
 
-  fetch("https://script.google.com/macros/s/AKfycbyZpgCOy4VFFPE_gq_jpv9Ed5KsPjJqLAX-8SEohVRYl_qAm2PIpEtpAALLvRx9Bdt7Pg/exec?sheet=Stock")
-    .then(res => res.json())
-    .then(data => {
-      const match = data.find(item => item["A"] === nro);
-      if (match) {
-        document.getElementById("datos-armazon").innerHTML = `
-          <p><strong>Modelo:</strong> ${match["B"]}</p>
-          <p><strong>Color:</strong> ${match["C"]}</p>
-          <p><strong>Tamaño:</strong> ${match["E"]}</p>
-          <p><strong>Precio:</strong> ${match["H"]}</p>
-        `;
-      } else {
-        document.getElementById("datos-armazon").innerText = "No encontrado.";
-      }
-    });
+  const response = await fetch(`${URL_ARMAZONES}?sheet=Stock`);
+  const result = await response.json();
+  const encontrado = result.find(r => r["A"] === nro);
+
+  const datosDiv = document.getElementById("datos-armazon");
+  if (encontrado) {
+    datosDiv.innerHTML = `
+      <p><strong>Modelo:</strong> ${encontrado["B"]}</p>
+      <p><strong>Color:</strong> ${encontrado["C"]}</p>
+      <p><strong>Tamaño:</strong> ${encontrado["E"]}</p>
+      <p><strong>Precio:</strong> ${encontrado["H"]}</p>`;
+  } else {
+    datosDiv.innerHTML = "<p style='color:red;'>No se encontró el armazón.</p>";
+  }
 });
 
 function buscarTrabajo() {
-  const dni = prompt("Ingresá DNI o número de trabajo:");
-  if (dni) {
-    // TODO: Buscar en Google Sheet si existe el trabajo y mostrarlo
-    alert("Funcionalidad en desarrollo.");
-  }
+  const dato = prompt("Ingresá número de trabajo o DNI para buscar:");
+  if (!dato) return;
+  alert("Función en desarrollo: pronto vas a poder consultar y editar trabajos guardados.");
 }
