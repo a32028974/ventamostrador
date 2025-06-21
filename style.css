@@ -43,3 +43,11 @@ section {
 .oculto {
   display: none;
 }
+
+.oculto {
+  display: none;
+}
+.sub-opciones {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
