@@ -1,0 +1,45 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 1rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+h1, h2 {
+  margin-top: 0;
+}
+
+input, select, button {
+  margin: 5px 0;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-between;
+}
+
+#resumen {
+  border: 1px solid #aaa;
+  padding: 1rem;
+  margin-top: 2rem;
+  background-color: #eef;
+}
+
+.oculto {
+  display: none;
+}
