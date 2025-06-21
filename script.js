@@ -17,7 +17,17 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
   const fecha = new Date().toLocaleDateString("es-AR");
   const trabajoID = numeroTrabajo++;
 
-  const tipoCristal = `${datos.tipo_lente} ${datos.material} ${datos.cristal}${datos.marca_antirreflejo ? " marca: " + datos.marca_antirreflejo : ""}${datos.color ? " color: " + datos.color : ""}`;
+let subtipo = "";
+if (datos.tipo_lente === "monofocal") {
+  subtipo = datos.subtipo_monofocal ? `de ${datos.subtipo_monofocal}` : "";
+} else if (datos.tipo_lente === "bifocal") {
+  if (datos.subtipo_bifocal === "kriptock_comun") subtipo = "kriptock común";
+  if (datos.subtipo_bifocal === "kriptock_invisible") subtipo = "kriptock invisible";
+  if (datos.subtipo_bifocal === "flattop") subtipo = "flattop";
+}
+
+const tipoCristal = `${datos.tipo_lente} ${subtipo} ${datos.material} ${datos.cristal}${datos.marca_antirreflejo ? " marca: " + datos.marca_antirreflejo : ""}${datos.color ? " color: " + datos.color : ""}`;
+
 
   const armazon = datos.opcion_armazon === "no_registrado"
     ? datos.armazon_no_registrado
