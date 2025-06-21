@@ -8,9 +8,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>Carga de Trabajo v21.6.25 9.50</h1>
+    <h1>Carga de Trabajo v21.6.25 10.06</h1>    
     <form id="formulario-trabajo">
-      
       <!-- Fecha estimada de entrega -->
       <section>
         <label>Fecha estimada de entrega:</label><br>
@@ -42,27 +41,88 @@
         <h2>Graduación</h2>
         <div>
           <label>OD:</label>
-          <input type="text" name="od_esf" placeholder="ESF" />
-          <input type="text" name="od_cil" placeholder="CIL" />
-          <input type="number" name="od_eje" placeholder="EJE" min="0" max="180" />
+          <input type="text" name="od_esf" placeholder="ESF" class="esf" />
+          <input type="text" name="od_cil" placeholder="CIL" class="cil" />
+          <input type="number" name="od_eje" placeholder="EJE" min="0" max="180" class="eje" />
         </div>
         <div>
           <label>OI:</label>
-          <input type="text" name="oi_esf" placeholder="ESF" />
-          <input type="text" name="oi_cil" placeholder="CIL" />
-          <input type="number" name="oi_eje" placeholder="EJE" min="0" max="180" />
+          <input type="text" name="oi_esf" placeholder="ESF" class="esf" />
+          <input type="text" name="oi_cil" placeholder="CIL" class="cil" />
+          <input type="number" name="oi_eje" placeholder="EJE" min="0" max="180" class="eje" />
         </div>
       </section>
 
-      <!-- Tipo de lente, material, etc. -->
+      <!-- Tipo de lente, material, cristal y opciones -->
       <section id="seleccion">
-        <!-- ...Acá irá todo lo que detallaste sobre monofocal/bifocal/material/etc. -->
+        <h2>Tipo de Lente</h2>
+        <label><input type="radio" name="tipo_lente" value="monofocal" required> Monofocal</label>
+        <label><input type="radio" name="tipo_lente" value="bifocal"> Bifocal</label>
+        <label><input type="radio" name="tipo_lente" value="ocupacional"> Ocupacional</label>
+        <label><input type="radio" name="tipo_lente" value="progresivo"> Progresivo</label>
+        <!-- Agregar select o inputs dependientes según selección -->
+        <!-- Esto se generará desde JS -->
+      </section>
+
+      <section id="material">
+        <h2>Material de la Lente</h2>
+        <select name="material" required>
+          <option value="">Seleccionar</option>
+          <option>Organico</option>
+          <option>Bluetech 1.57</option>
+          <option>Policarbonato 1.59</option>
+          <option>Mineral 1.52</option>
+          <option>Alto Indice 1.60</option>
+          <option>Alto Indice 1.61</option>
+          <option>Alto Indice 1.67</option>
+          <option>Highlite 1.70</option>
+          <option>Alto Indice 1.74</option>
+        </select>
+      </section>
+
+      <section id="cristal">
+        <h2>Tratamiento del Cristal</h2>
+        <select name="cristal" required>
+          <option value="">Seleccionar</option>
+          <option>Blanco</option>
+          <option>Con antirreflejo</option>
+          <option>Fotocromatico sin antirreflejo</option>
+          <option>Fotocromatico con antirreflejo</option>
+          <option>Polarizado neutro</option>
+          <option>Polarizado laboratorio con graduación</option>
+          <option>Fotoblue con antirreflejo</option>
+          <option>Lenticularización</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>Opciones adicionales</h2>
+        <label><input type="checkbox" name="a_filo"> A filo</label>
+        <label><input type="checkbox" name="biconvexo"> Biconvexo</label>
+        <label><input type="checkbox" name="biconcavo"> Biconcavo</label>
+      </section>
+
+      <section>
+        <h2>Calibrado</h2>
+        <label><input type="radio" name="calibrado" value="aro entero" required> Aro entero</label>
+        <label><input type="radio" name="calibrado" value="ranurado"> Ranurado</label>
+        <label><input type="radio" name="calibrado" value="perforado"> Perforado</label>
+      </section>
+
+      <section>
+        <h2>Servicios adicionales</h2>
+        <label>Antirreflejo (marca):</label>
+        <input type="text" name="marca_antirreflejo" />
+        <label>Coloración:</label>
+        <input type="text" name="color" />
+        <label>Otros:</label>
+        <input type="text" name="otros_adicionales" />
       </section>
 
       <!-- Armazón -->
       <section id="armazon">
         <h2>Armazón</h2>
-        <input type="number" id="numero-armazon" placeholder="N° de armazón" />
+        <input type="number" id="numero-armazon" placeholder="Nº de armazón" />
         <button type="button" id="buscar-armazon">Buscar</button>
         <div id="datos-armazon"></div>
         <label><input type="radio" name="opcion_armazon" value="no_registrado"> Armazón no registrado</label>
