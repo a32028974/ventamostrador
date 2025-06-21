@@ -132,3 +132,43 @@ function buscarTrabajo() {
   if (!dato) return;
   alert("Función en desarrollo: pronto vas a poder consultar y editar trabajos guardados.");
 }
+document.getElementById("btn-consulta").addEventListener("click", async () => {
+  const valor = document.getElementById("consulta").value.trim();
+  if (!valor) {
+    alert("Ingresá un número de trabajo o DNI");
+    return;
+  }
+
+  const response = await fetch(`${URL_GUARDAR}?consultar=${valor}`);
+  const resultado = await response.json();
+
+  if (!resultado || !resultado.encontrado) {
+    alert("No se encontró ningún trabajo con ese dato.");
+    return;
+  }
+
+  const form = document.getElementById("formulario-trabajo");
+
+  // Cargar los datos en el formulario
+  form.nombre.value = resultado.nombre || "";
+  form.dni.value = resultado.dni || "";
+  form.oculista.value = resultado.oculista || "";
+  form.jimena.checked = resultado.oculista?.toUpperCase() === "JIMENA";
+  form.otros_adicionales.value = resultado.observaciones || "";
+  form.od_esf.value = extraerDato(resultado.od, "ESF");
+  form.od_cil.value = extraerDato(resultado.od, "CIL");
+  form.od_eje.value = extraerDato(resultado.od, "EJE");
+  form.oi_esf.value = extraerDato(resultado.oi, "ESF");
+  form.oi_cil.value = extraerDato(resultado.oi, "CIL");
+  form.oi_eje.value = extraerDato(resultado.oi, "EJE");
+
+  alert("Trabajo cargado en el formulario.");
+});
+
+// Función auxiliar para extraer valores de texto como: "ESF +2.00 CIL -1.00 EJE 90°"
+function extraerDato(texto, clave) {
+  if (!texto) return "";
+  const regex = new RegExp(`${clave} ([^\\s°]+)`);
+  const match = texto.match(regex);
+  return match ? match[1] : "";
+}
