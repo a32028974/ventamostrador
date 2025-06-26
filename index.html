@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Óptica - Carga de trabajos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Carga de trabajos</h1>
+  <form id="formulario-trabajo">
+    <label>DNI:<input type="text" name="dni" required></label>
+    <label>Nombre y Apellido:<input type="text" name="nombre" required></label>
+    <label>Vendedor:<input type="text" name="vendedor" required></label>
+    <label>Fecha de retiro:<input type="date" name="fecha_retira"></label>
+    <label>N° trabajo:<input type="text" name="numero_trabajo"></label>
+    <label>Cristal:<input type="text" name="cristal"></label>
+    <label>Número armazón:<input type="text" name="numero_armazon"></label>
+    <label>Armazón detalle:<input type="text" name="armazon_detalle"></label>
+    <label>Total:<input type="number" name="total"></label>
+    <label>Seña:<input type="number" name="sena"></label>
+    <label>Saldo:<input type="number" name="saldo"></label>
+    <label>Forma de pago:<input type="text" name="forma_pago"></label>
+    <label>Otro concepto:<input type="text" name="otro_concepto"></label>
+    <label>Descripción:<input type="text" name="descripcion"></label>
+    <label>Tipo:<input type="text" name="tipo"></label>
+
+    <fieldset>
+      <legend>Graduación OD</legend>
+      <label>ESF:<select name="od_esf" id="od_esf"></select></label>
+      <label>CIL:<select name="od_cil" id="od_cil"></select></label>
+      <label>EJE:<input type="number" name="od_eje" min="0" max="180"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Graduación OI</legend>
+      <label>ESF:<select name="oi_esf" id="oi_esf"></select></label>
+      <label>CIL:<select name="oi_cil" id="oi_cil"></select></label>
+      <label>EJE:<input type="number" name="oi_eje" min="0" max="180"></label>
+    </fieldset>
+
+    <label>ADD:<input type="text" name="add"></label>
+    <button type="submit">Guardar e Imprimir</button>
+  </form>
+
+  <div id="resumen" class="oculto"></div>
+  <script src="script.js"></script>
+</body>
+</html>
