@@ -47,6 +47,22 @@ document.getElementById("formulario-trabajo").addEventListener("submit", async f
 
     const result = await response.json();
     if (result.success) {
+      // Si hay número de armazón, marcar como vendido
+      if (data.numero_armazon) {
+        await fetch("https://script.google.com/macros/s/AKfycbwnY731m7CL6alaeRAeBPX9FhKiOR5iqjLNmyEGtmbvf96bDdtggRs-yJ8PMpYKibiy/exec", {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            actualizar_estado: true,
+            numero_armazon: data.numero_armazon,
+            nuevo_estado: "Vendido"
+          })
+        });
+      }
+
       alert("Trabajo guardado exitosamente.");
       window.print();
       form.reset();
