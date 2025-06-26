@@ -1,163 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carga de Trabajo - Óptica</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Óptica - Carga de trabajos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Carga de Trabajo v21.6.25 13.18 </h1>
-    <form id="formulario-trabajo">
-      <!-- Consulta de trabajo existente -->
-      <section>
-        <label for="consulta">Consultar trabajo por Nº o DNI:</label>
-        <input type="text" id="consulta" placeholder="Nº de trabajo o DNI" />
-        <button type="button" id="btn-consulta">Buscar</button>
-      </section>
+  <h1>Carga de trabajos v26.6.25 12.41</h1>
+  <form id="formulario-trabajo">
+    <label>DNI:<input type="text" name="dni" required></label>
+    <label>Nombre y Apellido:<input type="text" name="nombre" required></label>
+    <label>Fecha de retiro:<input type="date" name="fecha_retira"></label>
+    <label>N° trabajo:<input type="text" name="numero_trabajo"></label>
+    <label>Cristal:<input type="text" name="cristal"></label>
 
-      <!-- Fecha estimada de entrega -->
-      <section>
-        <label>Fecha estimada de entrega:</label><br>
-        <label><input type="radio" name="entrega" value="estándar" required> Estándar (1 semana)</label>
-        <label><input type="radio" name="entrega" value="urgente"> Urgente (3 días)</label>
-        <label><input type="radio" name="entrega" value="laboratorio"> Laboratorio (10-20 días)</label>
-      </section>
+    <label>Número armazón:<input type="text" name="numero_armazon"></label>
+    <div id="datos-armazon"></div>
 
-      <!-- Datos del paciente -->
-      <section>
-        <h2>Paciente</h2>
-        <input type="text" name="nombre" placeholder="Apellido y nombre" required />
-        <input type="text" name="dni" placeholder="DNI" required />
-        <input type="tel" name="telefono" placeholder="Teléfono celular" required />
-        <input type="text" name="localidad" placeholder="Localidad" />
-      </section>
+    <label>Total:<input type="number" name="total"></label>
+    <label>Seña:<input type="number" name="sena"></label>
+    <label>Saldo:<input type="number" name="saldo"></label>
+    <label>Forma de pago:<input type="text" name="forma_pago"></label>
+    <label>Otro concepto:<input type="text" name="otro_concepto"></label>
+    <label>Descripción:<input type="text" name="descripcion"></label>
+    <label>Tipo (Lejos/Cerca/etc):<input type="text" name="tipo"></label>
 
-      <!-- Receta -->
-      <section>
-        <h2>Receta</h2>
-        <input type="text" name="oculista" placeholder="Apellido del oculista" />
-        <label><input type="checkbox" name="jimena" /> Jimena</label>
-        <label><input type="checkbox" name="copia" /> Copia anteojo en uso</label>
-        <input type="text" name="otros" placeholder="Otros" />
-      </section>
+    <fieldset>
+      <legend>Graduación OD</legend>
+      <label>ESF:<select name="od_esf" id="od_esf"></select></label>
+      <label>CIL:<select name="od_cil" id="od_cil"></select></label>
+      <label>EJE:<input type="number" name="od_eje" min="0" max="180"></label>
+    </fieldset>
 
-      <!-- Graduación -->
-      <section id="graduacion">
-        <h2>Graduación</h2>
-        <div>
-          <label>OD:</label>
-          <input type="text" name="od_esf" placeholder="ESF" class="esf" required />
-          <input type="text" name="od_cil" placeholder="CIL" class="cil" />
-          <input type="number" name="od_eje" placeholder="EJE" class="eje" min="0" max="180" />
-        </div>
-        <div>
-          <label>OI:</label>
-          <input type="text" name="oi_esf" placeholder="ESF" class="esf" required />
-          <input type="text" name="oi_cil" placeholder="CIL" class="cil" />
-          <input type="number" name="oi_eje" placeholder="EJE" class="eje" min="0" max="180" />
-        </div>
-      </section>
+    <fieldset>
+      <legend>Graduación OI</legend>
+      <label>ESF:<select name="oi_esf" id="oi_esf"></select></label>
+      <label>CIL:<select name="oi_cil" id="oi_cil"></select></label>
+      <label>EJE:<input type="number" name="oi_eje" min="0" max="180"></label>
+    </fieldset>
 
-      <!-- Tipo de lente, material, cristal y opciones -->
-      <section id="seleccion">
-        <h2>Tipo de Lente</h2>
-        <label><input type="radio" name="tipo_lente" value="monofocal" required> Monofocal</label>
-        <label><input type="radio" name="tipo_lente" value="bifocal"> Bifocal</label>
-        <label><input type="radio" name="tipo_lente" value="ocupacional"> Ocupacional</label>
-        <label><input type="radio" name="tipo_lente" value="progresivo"> Progresivo</label>
+    <label>ADD:<input type="text" name="add"></label>
 
-        <div id="opciones-monofocal" class="sub-opciones oculto">
-          <p><strong>Tipo Monofocal:</strong></p>
-          <label><input type="radio" name="subtipo_monofocal" value="lejos"> Lejos</label>
-          <label><input type="radio" name="subtipo_monofocal" value="cerca"> Cerca</label>
-          <label><input type="radio" name="subtipo_monofocal" value="intermedia"> Intermedia</label>
-        </div>
+    <button type="submit">Guardar y Imprimir</button>
+  </form>
 
-        <div id="opciones-bifocal" class="sub-opciones oculto">
-          <p><strong>Tipo Bifocal:</strong></p>
-          <label><input type="radio" name="subtipo_bifocal" value="kriptock_comun"> Kriptock común</label>
-          <label><input type="radio" name="subtipo_bifocal" value="kriptock_invisible"> Kriptock invisible</label>
-          <label><input type="radio" name="subtipo_bifocal" value="flattop"> Flattop</label>
-        </div>
-      </section>
-
-      <section id="material">
-        <h2>Material de la Lente</h2>
-        <select name="material" required>
-          <option value="">Seleccionar</option>
-          <option>Organico</option>
-          <option>Bluetech 1.57</option>
-          <option>Policarbonato 1.59</option>
-          <option>Mineral 1.52</option>
-          <option>Alto Indice 1.60</option>
-          <option>Alto Indice 1.61</option>
-          <option>Alto Indice 1.67</option>
-          <option>Highlite 1.70</option>
-          <option>Alto Indice 1.74</option>
-        </select>
-      </section>
-
-      <section id="cristal">
-        <h2>Tratamiento del Cristal</h2>
-        <select name="cristal" required>
-          <option value="">Seleccionar</option>
-          <option>Blanco</option>
-          <option>Con antirreflejo</option>
-          <option>Fotocromatico sin antirreflejo</option>
-          <option>Fotocromatico con antirreflejo</option>
-          <option>Polarizado neutro</option>
-          <option>Polarizado laboratorio con graduación</option>
-          <option>Fotoblue con antirreflejo</option>
-          <option>Lenticularización</option>
-        </select>
-      </section>
-
-      <section>
-        <h2>Opciones adicionales</h2>
-        <label><input type="checkbox" name="a_filo"> A filo</label>
-        <label><input type="checkbox" name="biconvexo"> Biconvexo</label>
-        <label><input type="checkbox" name="biconcavo"> Biconcavo</label>
-      </section>
-
-      <section>
-        <h2>Calibrado</h2>
-        <label><input type="radio" name="calibrado" value="aro entero" required> Aro entero</label>
-        <label><input type="radio" name="calibrado" value="ranurado"> Ranurado</label>
-        <label><input type="radio" name="calibrado" value="perforado"> Perforado</label>
-      </section>
-
-      <section>
-        <h2>Servicios adicionales</h2>
-        <label>Antirreflejo (marca):</label>
-        <input type="text" name="marca_antirreflejo" />
-        <label>Coloración:</label>
-        <input type="text" name="color" />
-        <label>Otros:</label>
-        <input type="text" name="otros_adicionales" />
-      </section>
-
-      <!-- Armazón -->
-      <section id="armazon">
-        <h2>Armazón</h2>
-        <input type="number" id="numero-armazon" placeholder="Nº de armazón" />
-        <button type="button" id="buscar-armazon">Buscar</button>
-        <div id="datos-armazon"></div>
-        <label><input type="radio" name="opcion_armazon" value="no_registrado"> Armazón no registrado</label>
-        <input type="text" id="armazon_no_registrado" placeholder="Marca y modelo" />
-        <label><input type="radio" name="opcion_armazon" value="cliente"> Armazón del cliente</label>
-        <input type="text" id="armazon_cliente" placeholder="Descripción del armazón del cliente" />
-      </section>
-
-      <!-- Botones -->
-      <div class="botones">
-        <button type="submit">Guardar y Imprimir</button>
-      </div>
-    </form>
-
-    <div id="resumen" class="oculto"></div>
-  </div>
+  <div id="resumen" class="oculto"></div>
 
   <script src="script.js"></script>
 </body>
